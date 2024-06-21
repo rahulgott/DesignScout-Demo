@@ -1,0 +1,6 @@
+.currentRectangle {
+    position: absolute;
+    border: 1px dashed blue;
+    pointer-events: none; /* This ensures that the rectangle does not interfere with other interactions */
+  }
+  

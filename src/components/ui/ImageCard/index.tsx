@@ -1,94 +1,55 @@
 import { useDraggableArea } from '../../../hooks/useDraggableArea';
-import styles from './styles.module.css'
+import styles from './styles.module.css';
+import Rectangle from '../Rectangle';
+import CurrentRectangle from '../CurrentRectangle';
+import InputForm from '../InputForm';
 
 interface ImageCardProps {
-  src: string,
-  altText: string
+  src: string;
+  altText: string;
 }
 
-export default function ImageCard({ src, altText }: ImageCardProps ) {
-  const { rectangles, currentRect, onMouseDown, onMouseMove, onMouseUp, inputVisible, setInputVisible, inputPosition, submitComment, showInputOnClick, inputValue, setInputValue, selectedRectIndex} = useDraggableArea();
+export default function ImageCard({ src, altText }: ImageCardProps) {
+  const {
+    rectangles,
+    selectedRectIndex,
+    inputVisible,
+    inputValue,
+    inputPosition,
+    currentRect,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    showInputOnClick,
+    submitComment,
+    setInputValue,
+    setInputVisible,
+  } = useDraggableArea();
 
   return (
-    <>
-      <div className={styles.card} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
-        <img src={src} alt={altText} className={styles.image} draggable="false" />
-
-        {rectangles.map((rect, index) => (
-          <div key={index}>
-            {selectedRectIndex === index && (
-              <div
-                style={{
-                  position: 'absolute',
-                  left: `${rect.x}px`,
-                  top: `${rect.y}px`,
-                  width: `${rect.width}px`,
-                  height: `${rect.height}px`,
-                  border: '1.2px dashed purple',
-                  pointerEvents: 'none',
-                }}
-              />
-            )}
-            <div
-              onClick={() => showInputOnClick(index)}
-              style={{
-                position: 'absolute',
-                left: `${rect.x + rect.width}px`,
-                top: `${rect.y + rect.height - 12}px`,
-                width: "32px",
-                height: "32px",
-                backgroundColor: "purple",
-                borderRadius: "50%"
-              }}
-            />
-          </div>
-        ))}
-        {currentRect && (
-          <div
-            style={{
-              position: 'absolute',
-              left: `${currentRect.x}px`,
-              top: `${currentRect.y}px`,
-              width: `${currentRect.width}px`,
-              height: `${currentRect.height}px`,
-              border: '1px dashed blue',
-              pointerEvents: 'none',
-            }}
-          />
-        )}
-        {inputVisible && (
-          <form 
-            onSubmit={(e) => {
-                e.preventDefault()
-                submitComment(inputValue)
-                setInputVisible(false)
-                setInputValue("")
-            }}
-            style={{
-                position: 'absolute',
-                left: `${inputPosition.x}px`,
-                top: `${inputPosition.y - 10}px`,
-            }}>
-              <input
-                className="input-class-name" // Add a class name to target the input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder='Enter your thoughts'
-                autoFocus
-                type="text"
-                style={{
-                    position: "relative",
-                    height: "32px",
-                    width: "120px",
-                    backgroundColor: "beige",
-                    color: "black",
-                }}
-              />
-            <button type='submit'>Submit</button>
-          </form>
-      
+    <div className={styles.card} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
+      <img src={src} alt={altText} className={styles.image} draggable="false" />
+      {rectangles.map((rect, index) => (
+        <Rectangle
+          key={index}
+          rect={rect}
+          index={index}
+          selectedRectIndex={selectedRectIndex}
+          showInputOnClick={showInputOnClick}
+        />
+      ))}
+      {currentRect && (
+        <CurrentRectangle rect={currentRect} />
       )}
-      </div>
-    </>
-  )
-}
+      {inputVisible && (
+        <InputForm
+          onSubmit={submitComment}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          inputPosition={inputPosition}
+          setInputVisible={setInputVisible}
+        />
+      )}
+    </div>
+  );
+};

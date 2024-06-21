@@ -1,0 +1,18 @@
+.selectedRectangle {
+    /* position: absolute; */
+    /* border: 1.2px dashed purple; */
+    /* pointer-events: none; Ignore mouse events to allow events on underlying elements */
+  }
+  
+  .rectangleTrigger {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-color: purple;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
